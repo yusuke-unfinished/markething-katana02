@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scalable Education Business Architect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans JP', sans-serif; background-color: #F3F4F6; color: #1F2937; }
+        .model-card { transition: all 0.3s ease; border: 2px solid transparent; }
+        .model-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .selected-model { border-color: #2563EB; background-color: #EFF6FF; }
+        
+        /* Chart Container - Strictly Enforced */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            height: 350px;
+            max-height: 400px;
+        }
+    </style>
+    <!-- Chosen Palette: Scalable Blue & Analytical Gray
+         Background: #F3F4F6 (Cool Gray)
+         Primary: #2563EB (Royal Blue - signifying Tech/Trust)
+         Accent: #10B981 (Green - signifying Profit/Growth)
+         Text: #1F2937 (Dark Gray)
+    -->
+
+    <!-- Application Structure Plan:
+         1. Introduction: "From Labor to Asset". Explaining the shift from consulting to product.
+         2. Model Selector: 3 types of scalable education (SaaS-like, Content-based, Peer-to-Peer).
+         3. Marginal Cost Simulator: The core "Math". Comparing Labor-intensive vs. Capital-intensive models.
+            - Visualizes how profit margins diverge as user count grows.
+         4. The "Hook" Design: How to retain users without humans (Gamification/Data feedback).
+    -->
+
+    <!-- Visualization & Content Choices:
+         - Cost Structure Chart: Line Chart. Goal: Compare. Vital to show the "J-Curve" of software economics.
+         - Loop Visualizer: Dynamic Step Display. Goal: Organize. Shows the "Trigger -> Action -> Reward" loop.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <h1 class="text-xl font-bold tracking-tight text-gray-800 flex items-center">
+                <span class="bg-blue-600 text-white px-2 py-1 rounded text-xs mr-2">SCALABLE</span>
+                Education Architect
+            </h1>
+            <div class="text-xs text-gray-500 hidden sm:block">脱属人化ビジネスモデル設計</div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <!-- Intro -->
+        <section class="max-w-4xl mx-auto text-center space-y-4">
+            <h2 class="text-3xl font-bold text-gray-900">「労働集約」から<span class="text-blue-600">「資本集約」</span>へ。</h2>
+            <p class="text-gray-600 leading-relaxed">
+                人に依存しないビジネスとは、教育を「サービス」ではなく「プロダクト（資産）」として再定義することです。<br>
+                一度作ったシステムやコンテンツが、寝ている間も価値を生み出し続けるモデル（限界費用ゼロ）を設計します。
+            </p>
+        </section>
+
+        <!-- STEP 1: Model Selection -->
+        <section id="model-selection" class="space-y-6">
+            <div class="flex items-center space-x-2 mb-4 border-b border-gray-200 pb-2">
+                <span class="bg-gray-800 text-white text-xs font-bold px-2 py-1 rounded">STEP 1</span>
+                <h3 class="text-xl font-bold text-gray-800">システム型モデルの選択</h3>
+            </div>
+            <p class="text-sm text-gray-500 mb-4">どのような「仕組み」で価値を提供しますか？人手を介さない3つの型。</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Model A: SaaS / Tool -->
+                <div onclick="selectModel('tool')" id="card-tool" class="model-card bg-white p-6 rounded-xl shadow-sm cursor-pointer relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded-bl">ツール型</div>
+                    <h4 class="text-lg font-bold mb-2 group-hover:text-blue-600">Tool / SaaS型</h4>
+                    <p class="text-xs text-gray-500 mb-3">診断、シミュレーター、テンプレート等をSaaSとして提供。</p>
+                    <ul class="text-xs text-gray-600 space-y-1 list-disc pl-4">
+                        <li><strong>価値:</strong> 効率化、可視化</li>
+                        <li><strong>教育:</strong> 「使いながら学ぶ」</li>
+                        <li><strong>例:</strong> 会計ソフト、SEO分析ツール</li>
+                    </ul>
+                </div>
+
+                <!-- Model B: Content / AI -->
+                <div onclick="selectModel('content')" id="card-content" class="model-card bg-white p-6 rounded-xl shadow-sm cursor-pointer relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-purple-100 text-purple-800 text-xs font-bold px-2 py-1 rounded-bl">自動コンテンツ型</div>
+                    <h4 class="text-lg font-bold mb-2 group-hover:text-purple-600">Content / AI型</h4>
+                    <p class="text-xs text-gray-500 mb-3">動画講義 + 自動テスト + AIフィードバック。</p>
+                    <ul class="text-xs text-gray-600 space-y-1 list-disc pl-4">
+                        <li><strong>価値:</strong> 知識網羅、即時FB</li>
+                        <li><strong>教育:</strong> マイクロラーニング</li>
+                        <li><strong>例:</strong> Duolingo, 資格アプリ</li>
+                    </ul>
+                </div>
+
+                <!-- Model C: Network / P2P -->
+                <div onclick="selectModel('network')" id="card-network" class="model-card bg-white p-6 rounded-xl shadow-sm cursor-pointer relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded-bl">コミュニティ型</div>
+                    <h4 class="text-lg font-bold mb-2 group-hover:text-green-600">Network / P2P型</h4>
+                    <p class="text-xs text-gray-500 mb-3">生徒同士が教え合うプラットフォーム。講師はファシリテートのみ。</p>
+                    <ul class="text-xs text-gray-600 space-y-1 list-disc pl-4">
+                        <li><strong>価値:</strong> 相互学習、所属欲求</li>
+                        <li><strong>教育:</strong> 集合知、ピアレビュー</li>
+                        <li><strong>例:</strong> GitHub, Q&Aサイト</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Dynamic Advice based on selection -->
+            <div id="model-advice" class="bg-blue-50 border-l-4 border-blue-600 p-4 rounded text-sm text-gray-700 hidden animate-fade-in">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+        <!-- STEP 2: Marginal Cost Simulator -->
+        <section class="space-y-6">
+            <div class="flex items-center space-x-2 mb-4 border-b border-gray-200 pb-2">
+                <span class="bg-gray-800 text-white text-xs font-bold px-2 py-1 rounded">STEP 2</span>
+                <h3 class="text-xl font-bold text-gray-800">スケーラビリティ（限界利益）の数理</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Controls -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 h-fit">
+                    <h4 class="font-bold text-gray-700 mb-4">シミュレーション設定</h4>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">想定生徒数 (Scale)</label>
+                            <input type="range" id="user-count" min="100" max="10000" step="100" value="1000" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                            <div class="text-right font-bold text-xl text-blue-600 mt-1"><span id="user-val">1,000</span>人</div>
+                        </div>
+
+                        <div class="pt-4 border-t border-gray-100">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium text-red-500">人依存モデル (Consulting)</span>
+                            </div>
+                            <p class="text-xs text-gray-400 mb-2">生徒50人ごとに講師1名追加 (人件費増)</p>
+                            <div class="text-sm">予想利益率: <span id="consulting-margin" class="font-bold text-red-600">20%</span></div>
+                        </div>
+
+                        <div class="pt-2">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium text-blue-600">システム型 (Systematic)</span>
+                            </div>
+                            <p class="text-xs text-gray-400 mb-2">開発費は初期のみ。追加コストほぼゼロ。</p>
+                            <div class="text-sm">予想利益率: <span id="system-margin" class="font-bold text-blue-600">85%</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h4 class="font-bold text-gray-700 mb-2 text-sm">利益総額の推移 (Profit Growth J-Curve)</h4>
+                    <div class="chart-container">
+                        <canvas id="profitChart"></canvas>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2 text-center">システム型は初期投資回収後、利益が指数関数的に伸びる（Jカーブ）。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- STEP 3: Engagement Loop -->
+        <section class="space-y-6">
+            <div class="flex items-center space-x-2 mb-4 border-b border-gray-200 pb-2">
+                <span class="bg-gray-800 text-white text-xs font-bold px-2 py-1 rounded">STEP 3</span>
+                <h3 class="text-xl font-bold text-gray-800">「人」の代わりに「習慣」を作る</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                        人が介在しない場合、最大の敵は「継続率」です。<br>
+                        講師が励ます代わりに、システムがユーザーをフック（Hook）する仕掛けが必要です。以下の4段階をループさせる機能を実装してください。
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm">1</div>
+                            <div class="ml-4">
+                                <h5 class="text-sm font-bold text-gray-800">Trigger (きっかけ)</h5>
+                                <p class="text-xs text-gray-500">プッシュ通知、定期レポート、課題のリマインド。</p>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm">2</div>
+                            <div class="ml-4">
+                                <h5 class="text-sm font-bold text-gray-800">Action (行動)</h5>
+                                <p class="text-xs text-gray-500">1分で終わるクイズ、ボタンを押すだけの診断。</p>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm">3</div>
+                            <div class="ml-4">
+                                <h5 class="text-sm font-bold text-gray-800">Reward (報酬)</h5>
+                                <p class="text-xs text-gray-500">スコア表示、バッジ、レベルアップ、可視化された成長。</p>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm">4</div>
+                            <div class="ml-4">
+                                <h5 class="text-sm font-bold text-gray-800">Investment (投資)</h5>
+                                <p class="text-xs text-gray-500">データの蓄積。使えば使うほど自分専用のツールになる。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Representation -->
+                <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-200 flex items-center justify-center">
+                    <div class="relative w-64 h-64">
+                        <!-- Simple CSS Circle Visualization -->
+                        <div class="absolute inset-0 border-4 border-blue-100 rounded-full"></div>
+                        <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-2 text-blue-600 font-bold text-sm">Trigger</div>
+                        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-white px-2 text-blue-600 font-bold text-sm">Reward</div>
+                        <div class="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-2 text-blue-600 font-bold text-sm">Investment</div>
+                        <div class="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 bg-white px-2 text-blue-600 font-bold text-sm">Action</div>
+                        
+                        <!-- Center Text -->
+                        <div class="absolute inset-0 flex items-center justify-center flex-col">
+                            <span class="text-2xl font-bold text-gray-800">Hook</span>
+                            <span class="text-xs text-gray-400">Model</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- Data & Logic ---
+        const adviceData = {
+            tool: {
+                title: "Tool / SaaS型へのアドバイス",
+                text: "「教育」を売るのではなく、「不便の解消」を売ってください。ユーザーは学びたいのではなく、楽をしたいのです。ツールを使う過程で自然とノウハウが身につくUX（ユーザー体験）を設計しましょう。",
+                kpi: "DAU (Daily Active Users) / 機能利用率"
+            },
+            content: {
+                title: "Content / AI型へのアドバイス",
+                text: "「飽き」との戦いです。Netflixに対抗できるレベルのエンタメ性か、ライザップのような強制力（AIによる管理）が必要です。マイクロラーニング化し、小さな成功体験を頻繁に与えてください。",
+                kpi: "完了率 / 滞在時間"
+            },
+            network: {
+                title: "Network / P2P型へのアドバイス",
+                text: "最初の熱量あるコアメンバー（n=10）の質が全てです。システムだけでなく「コミュニティ・ガイドライン（憲法）」を作りましょう。生徒が生徒を教えることで、教える側が最も学ぶというサイクルを作ります。",
+                kpi: "UGC数 (投稿数) / 相互リアクション数"
+            }
+        };
+
+        let profitChart;
+
+        window.onload = function() {
+            selectModel('tool');
+            initChart();
+            setupListeners();
+            updateSimulation();
+        };
+
+        function selectModel(model) {
+            // UI Update
+            document.querySelectorAll('.model-card').forEach(el => {
+                el.classList.remove('selected-model');
+            });
+            document.getElementById(`card-${model}`).classList.add('selected-model');
+
+            // Advice Update
+            const adviceDiv = document.getElementById('model-advice');
+            const data = adviceData[model];
+            
+            adviceDiv.innerHTML = `
+                <h5 class="font-bold text-blue-800 mb-1">${data.title}</h5>
+                <p class="mb-2">${data.text}</p>
+                <div class="text-xs font-bold text-blue-600 bg-white inline-block px-2 py-1 rounded border border-blue-200">重要KPI: ${data.kpi}</div>
+            `;
+            adviceDiv.classList.remove('hidden');
+        }
+
+        function setupListeners() {
+            document.getElementById('user-count').addEventListener('input', (e) => {
+                const val = parseInt(e.target.value);
+                document.getElementById('user-val').innerText = val.toLocaleString();
+                updateSimulation(val);
+            });
+        }
+
+        function updateSimulation(users = 1000) {
+            // Logic:
+            // Consulting: Price 50k, Variable Cost 30k (high labor), Fixed Cost 500k
+            // System: Price 10k (lower), Variable Cost 500 (server), Fixed Cost 3M (dev)
+            
+            const consultPrice = 50000;
+            const consultVarCost = 35000; // High labor cost per user
+            const consultFixed = 500000;
+
+            const sysPrice = 10000;
+            const sysVarCost = 500; // Server/API cost
+            const sysFixed = 5000000; // Initial Dev Cost
+
+            const consultRevenue = users * consultPrice;
+            const consultCost = consultFixed + (users * consultVarCost);
+            const consultProfit = consultRevenue - consultCost;
+            const consultMargin = (consultProfit / consultRevenue) * 100;
+
+            const sysRevenue = users * sysPrice;
+            const sysCost = sysFixed + (users * sysVarCost);
+            const sysProfit = sysRevenue - sysCost;
+            const sysMargin = (sysProfit / sysRevenue) * 100;
+
+            // Update UI Texts
+            document.getElementById('consulting-margin').innerText = consultMargin > 0 ? `${consultMargin.toFixed(1)}%` : "赤字";
+            document.getElementById('system-margin').innerText = sysMargin > 0 ? `${sysMargin.toFixed(1)}%` : "赤字";
+
+            updateChart(users);
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('profitChart').getContext('2d');
+            profitChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: '人依存モデル (Consulting)',
+                            data: [],
+                            borderColor: '#EF4444', // Red
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'システム型 (Scalable)',
+                            data: [],
+                            borderColor: '#2563EB', // Blue
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ¥' + Math.round(context.raw / 10000).toLocaleString() + '万';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: { color: '#f3f3f3' },
+                            title: { display: true, text: '利益額 (Profit)' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            title: { display: true, text: 'ユーザー数 (Users)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChart(currentUsers) {
+            // Generate data points for the curve up to currentUsers + buffer
+            const labels = [];
+            const consultData = [];
+            const sysData = [];
+            
+            // Generate 10 points
+            const max = 10000;
+            const step = 1000;
+
+            for(let i = 100; i <= max; i += step) {
+                labels.push(i);
+                
+                // Consulting Math
+                const cRev = i * 50000;
+                const cCost = 500000 + (i * 35000);
+                consultData.push(cRev - cCost);
+
+                // System Math
+                const sRev = i * 10000;
+                const sCost = 5000000 + (i * 500);
+                sysData.push(sRev - sCost);
+            }
+
+            profitChart.data.labels = labels;
+            profitChart.data.datasets[0].data = consultData;
+            profitChart.data.datasets[1].data = sysData;
+            profitChart.update();
+        }
+
+    </script>
+</body>
+</html>
